@@ -30,14 +30,18 @@
       </el-card>
     </div>
     <div class="vline-container">
-      
+      <Vcharts />
     </div>
   </div>
 </template>
 
 <script>
+import Vcharts from "./components/Vcharts.vue";
+
 export default {
-    
+  components: {
+    Vcharts,
+  }
 };
 </script>
 

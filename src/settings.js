@@ -1,7 +1,5 @@
 module.exports = {
-
-  title: 'Vue Admin Template',
-
+  title: '每日优鲜',
   /**
    * @type {boolean} true | false
    * @description Whether fix the header

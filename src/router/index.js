@@ -84,6 +84,13 @@ export const constantRoutes = [
         name: 'AddCommodity',
         component: () => import('@/views/addCommodity/index'),
         meta: { title: '添加商品', icon: 'el-icon-circle-plus' }
+      },
+      {
+        path: 'editCommodity/:id',
+        name: 'EditCommodity',
+        hidden: true,
+        component: () => import('@/views/addCommodity/index'),
+        meta: { title: '编辑商品', icon: 'el-icon-circle-plus' }
       }
     ]
   },

@@ -8,6 +8,9 @@ import user from './modules/user'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+  state: {
+    aapkey: "See_1647013468758",
+  },
   modules: {
     app,
     settings,

@@ -6,7 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
-
+import VCharts from 'v-charts'
 import '@/styles/index.scss' // global css
 
 import App from './App'
@@ -16,6 +16,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+Vue.use(VCharts);
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

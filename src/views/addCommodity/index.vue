@@ -1,78 +1,107 @@
 <template>
-  <div class="app-container">
-    <el-input v-model="filterText" placeholder="Filter keyword" style="margin-bottom:30px;" />
-
-    <el-tree
-      ref="tree2"
-      :data="data2"
-      :props="defaultProps"
-      :filter-node-method="filterNode"
-      class="filter-tree"
-      default-expand-all
-    />
-
+  <div class="add-commodity-container">
+    <div class="steps-container">
+      <el-steps
+        :active="active"
+        simple
+        process-status="wait"
+        finish-status="success"
+        align-center
+      >
+        <el-step title="填写商品基本信息"></el-step>
+        <el-step title="填写商品销售信息"></el-step>
+        <el-step title="完成"></el-step>
+      </el-steps>
+    </div>
+    <div class="form-container">
+      <BasicDetail v-if="active === 1" @next="next" :ruleForm="form" />
+      <SaleDetail
+        v-if="active === 2"
+        @next="next"
+        @prev="prev"
+        :ruleForm="form"
+      />
+      <Complete v-if="active === 3" @continue="continueAdd" />
+    </div>
   </div>
 </template>
 
 <script>
-export default {
+import { addProducs, datail, edit } from "@/api/product";
+import BasicDetail from "./components/basicDetail.vue";
+import SaleDetail from "./components/saleDetail.vue";
+import Complete from "./components/Complete.vue";
 
+export default {
+  components: {
+    BasicDetail,
+    SaleDetail,
+    Complete,
+  },
   data() {
     return {
-      filterText: '',
-      data2: [{
-        id: 1,
-        label: 'Level one 1',
-        children: [{
-          id: 4,
-          label: 'Level two 1-1',
-          children: [{
-            id: 9,
-            label: 'Level three 1-1-1'
-          }, {
-            id: 10,
-            label: 'Level three 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: 'Level one 2',
-        children: [{
-          id: 5,
-          label: 'Level two 2-1'
-        }, {
-          id: 6,
-          label: 'Level two 2-2'
-        }]
-      }, {
-        id: 3,
-        label: 'Level one 3',
-        children: [{
-          id: 7,
-          label: 'Level two 3-1'
-        }, {
-          id: 8,
-          label: 'Level two 3-2'
-        }]
-      }],
-      defaultProps: {
-        children: 'children',
-        label: 'label'
-      }
-    }
+      active: 1,
+      form: {
+        title: "",
+        desc: "",
+        category: "",
+        c_items: "",
+        tags: ["24小时发货"],
+        price: 0,
+        unit: "",
+        price_off: 0,
+        inventory: 0,
+        image: [],
+      },
+    };
   },
-  watch: {
-    filterText(val) {
-      this.$refs.tree2.filter(val)
+  created() {
+    const { id } = this.$route.params;
+    if(id) {
+      datail(id).then((res) => {
+        this.form = res.data.data;
+      })
     }
+    console.log(id);
   },
 
   methods: {
-    filterNode(value, data) {
-      if (!value) return true
-      return data.label.indexOf(value) !== -1
-    }
-  }
-}
+    continueAdd() {
+      location.reload();
+    },
+
+    next(form) {
+      this.form = {
+        ...this.form,
+        form,
+      };
+      if (this.active === 1) {
+        this.active += 1;
+      } else {
+        if(this.$route.params) {
+          edit(this.form).then((res) => {
+            this.active += 1;
+            console.log(res)
+          });
+        } else{
+          addProducs(this.form).then((res) => {
+          this.active += 1;
+          
+        });
+        }
+        
+      }
+    },
+    prev() {
+      this.active -= 1;
+    },
+  },
+};
 </script>
 
+<style scoped>
+.form-container {
+  width: 65%;
+  margin: 80px auto;
+}
+</style>
